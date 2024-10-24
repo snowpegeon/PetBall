@@ -4,7 +4,7 @@
 
   <groupId>com.github.albatross256</groupId>
   <artifactId>PetBall</artifactId>
-  <version>5.2.1</version>
+  <version>5.2.2</version>
   <build>
     <plugins>
       <plugin>
@@ -78,6 +78,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
+    <rtag-version>1.5.8</rtag-version>
   </properties>
   <repositories>
     <repository>
@@ -93,19 +94,19 @@
     <dependency>
       <groupId>com.saicone.rtag</groupId>
       <artifactId>rtag</artifactId>
-      <version>1.5.5</version>
+      <version>${rtag-version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.saicone.rtag</groupId>
       <artifactId>rtag-item</artifactId>
-      <version>1.5.5</version>
+      <version>${rtag-version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.saicone.rtag</groupId>
       <artifactId>rtag-entity</artifactId>
-      <version>1.5.5</version>
+      <version>${rtag-version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

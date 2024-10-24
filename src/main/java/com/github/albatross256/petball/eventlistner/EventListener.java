@@ -53,6 +53,7 @@ import com.github.albatross256.petball.WorldManager;
 import com.github.albatross256.petball.balldata.BallData;
 import com.github.albatross256.petball.lorewriter.factory.LoreWriterFactory;
 import com.github.teruteru128.logger.Logger;
+import com.saicone.rtag.RtagEditor;
 import com.saicone.rtag.RtagEntity;
 import com.saicone.rtag.RtagItem;
 import com.saicone.rtag.stream.TStream;
@@ -865,7 +866,8 @@ public class EventListener implements Listener {
         this.ballManager.getBallData(entity.getType()).getFilledBallMaterial(), 1);
     ItemStack clonedItem = item.clone();
     RtagItem itemTag = new RtagItem(clonedItem);
-    itemTag.update();
+    // 保存タグ情報の構築
+    RtagEditor<ItemStack, RtagItem> editor = itemTag;
     logger.trace("item:" + item);
 
     //空気対策
@@ -877,19 +879,19 @@ public class EventListener implements Listener {
     }
 
     logger.trace("[TRACE]AfterEntityTag:" + entityTag.get());
-    itemTag.set(entityTag.get(), ENTITYBALL_ISC_KEY);
-    itemTag.set(entity.getType().toString(), ENTITYBALL_CONTENT_KEY);
+    editor.set(entityTag.get(), ENTITYBALL_ISC_KEY);
+    editor.set(entity.getType().toString(), ENTITYBALL_CONTENT_KEY);
 
     /*
      * 出し入れ同時対策1
      */
     long time = System.currentTimeMillis();
-    itemTag.set(time, ENTITYBALL_TIMESTAMP_KEY);
+    editor.set(time, ENTITYBALL_TIMESTAMP_KEY);
     entity.getPersistentDataContainer()
         .set(new NamespacedKey(this.plugin, ENTITYBALL_TIMESTAMP_KEY),
             PersistentDataType.LONG, time);
 
-    itemTag.load();
+    editor.load();
     logger.trace("entityBall:" + clonedItem);
 
     ItemMeta itemMeta2 = clonedItem.getItemMeta();
