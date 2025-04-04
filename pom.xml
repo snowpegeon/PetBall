@@ -4,7 +4,7 @@
 
   <groupId>com.github.albatross256</groupId>
   <artifactId>PetBall</artifactId>
-  <version>5.2.3</version>
+  <version>5.2.4</version>
   <build>
     <plugins>
       <plugin>
