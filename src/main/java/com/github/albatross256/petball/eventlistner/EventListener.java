@@ -70,6 +70,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -461,6 +462,12 @@ public class EventListener implements Listener {
     this.logger.trace("[TRACE]entityTag:" + entityTag.get());
     // 1.20.5以降のタグ保存用のデータ
     ItemStack equippedHorseArmor = null;
+
+    // 1.21以降のタグ保存用のデータ
+    Float maxHealth = null;
+    Float movementSpeed = null;
+    Float jumpStrength = null;
+
     if (tag.hasTag(ENTITYBALL_ISC_KEY)) {
       Map<?, ?> tags = tag.get(ENTITYBALL_ISC_KEY);
       tags.forEach((k, v) -> entityTag.set(v, k));
@@ -478,6 +485,62 @@ public class EventListener implements Listener {
             Object v = tags.get(k);
             this.logger.trace("[TRACE] key=" + k);
             this.logger.trace("[TRACE] value=" + v.toString());
+
+            // Attributes を取得
+            boolean isAttributes = "Attributes".equals(k);
+            this.logger.trace("[TRACE] isAttributes ? " + isAttributes);
+            if (isAttributes && v instanceof List<?> l) {
+              boolean isNotEmptyAttributesList = !l.isEmpty();
+
+              if (isNotEmptyAttributesList) {
+                for (var attr : l) {
+                  logger.trace("[TRACE] attr=" + attr.toString());
+                  if (attr instanceof Map<?, ?> attrMap) {
+                    boolean isNotEmptyAttrMap = !attrMap.keySet().isEmpty();
+                    this.logger.trace("[TRACE] isNotEmptyAttrMap ? " + isNotEmptyAttrMap);
+                    if (isNotEmptyAttrMap) {
+                      Float baseValue = null;
+                      Attribute attribute = null;
+
+                      for (var key : attrMap.keySet()) {
+                        if (key instanceof String attrKey) {
+                          boolean isAttrKeyBase = "Base".equals(attrKey);
+                          boolean isAttrKeyName = "Name".equals(attrKey);
+
+                          if (isAttrKeyBase) {
+                            baseValue = Float.valueOf(attrMap.get(attrKey).toString());                            
+                          
+                          } else if (isAttrKeyName) {
+                            String attrName = (String) attrMap.get(attrKey);
+                            // 最大HPのAttribute
+                            if ("minecraft:generic.max_health".equals(attrName)) {
+                              attribute = Attribute.GENERIC_MAX_HEALTH;
+                            }
+                            // スピードのAttribute
+                            else if ("minecraft:generic.movement_speed".equals(attrName)) {
+                              attribute = Attribute.GENERIC_MOVEMENT_SPEED;
+                            }
+                            // 跳躍力のAttribute
+                            else if ("minecraft:horse.jump_strength".equals(attrName)) {
+                              attribute = Attribute.GENERIC_JUMP_STRENGTH;
+                            }
+                          }
+                        }
+                        if (Objects.nonNull(baseValue) && Objects.nonNull(attribute)) {
+                          if (Attribute.GENERIC_MAX_HEALTH.equals(attribute)) {
+                            maxHealth = baseValue;
+                          } else if (Attribute.GENERIC_MOVEMENT_SPEED.equals(attribute)) {
+                            movementSpeed = baseValue;
+                          } else if (Attribute.GENERIC_JUMP_STRENGTH.equals(attribute)) {
+                            jumpStrength = baseValue;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
 
             boolean isArmorItems = k.equals("ArmorItems");
             this.logger.trace("[TRACE] boolean isArmorItems <- k.equals(\"ArmorItems\")");
@@ -546,6 +609,26 @@ public class EventListener implements Listener {
     }
     entityTag.load();
     this.logger.trace("[TRACE] entityTag.load()");
+    // 基本パラメータの設定
+    // ウマ系
+    if (entity instanceof AbstractHorse absHorse) {
+      this.logger.trace("[TRACE] entity is AbstractHorse");
+      // 最大体力
+      if (Objects.nonNull(maxHealth)) {
+        absHorse.setMaxHealth(Double.valueOf((double) maxHealth));
+        this.logger.trace("[TRACE] absHorse.setMaxHealth(Double.valueOf(" + maxHealth + "))");
+      }
+      // 移動速度
+      if (Objects.nonNull(movementSpeed)) {
+        absHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue((double) movementSpeed);
+        this.logger.trace("[TRACE] absHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(" + movementSpeed + ")");
+      }
+      // 跳躍力
+      if (Objects.nonNull(jumpStrength)) {
+        absHorse.setJumpStrength((double) jumpStrength);
+        this.logger.trace("[TRACE] absHorse.setJumpStrength((double) " + jumpStrength + ")");
+      }
+    }
 
     // 旧式馬鎧の設定
     if (Objects.nonNull(equippedHorseArmor) && entity instanceof Horse horse) {
