@@ -70,6 +70,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -95,13 +96,16 @@ import org.bukkit.block.data.type.Repeater;
 import org.bukkit.block.data.type.Switch;
 import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.AbstractHorse;
+import org.bukkit.entity.Camel;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Donkey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Mule;
+import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Strider;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -461,6 +465,15 @@ public class EventListener implements Listener {
     this.logger.trace("[TRACE]entityTag:" + entityTag.get());
     // 1.20.5以降のタグ保存用のデータ
     ItemStack equippedHorseArmor = null;
+
+    // 1.21以降のタグ保存用のデータ
+    Float maxHealth = null;
+    Float movementSpeed = null;
+    Float jumpStrength = null;
+    
+    // 1.21.5以降のタグ保存用のデータ
+    ItemStack equippedSaddle = null;
+
     if (tag.hasTag(ENTITYBALL_ISC_KEY)) {
       Map<?, ?> tags = tag.get(ENTITYBALL_ISC_KEY);
       tags.forEach((k, v) -> entityTag.set(v, k));
@@ -479,6 +492,142 @@ public class EventListener implements Listener {
             this.logger.trace("[TRACE] key=" + k);
             this.logger.trace("[TRACE] value=" + v.toString());
 
+            // Attributes を取得
+            boolean isAttributes = "Attributes".equals(k);
+            this.logger.trace("[TRACE] isAttributes ? " + isAttributes);
+            if (isAttributes && v instanceof List<?> l) {
+              boolean isNotEmptyAttributesList = !l.isEmpty();
+
+              if (isNotEmptyAttributesList) {
+                for (var attr : l) {
+                  logger.trace("[TRACE] attr=" + attr.toString());
+                  if (attr instanceof Map<?, ?> attrMap) {
+                    boolean isNotEmptyAttrMap = !attrMap.keySet().isEmpty();
+                    this.logger.trace("[TRACE] isNotEmptyAttrMap ? " + isNotEmptyAttrMap);
+                    if (isNotEmptyAttrMap) {
+                      Float baseValue = null;
+                      Attribute attribute = null;
+
+                      for (var key : attrMap.keySet()) {
+                        if (key instanceof String attrKey) {
+                          boolean isAttrKeyBase = "Base".equals(attrKey);
+                          boolean isAttrKeyName = "Name".equals(attrKey);
+
+                          if (isAttrKeyBase) {
+                            baseValue = Float.valueOf(attrMap.get(attrKey).toString());                            
+                          
+                          } else if (isAttrKeyName) {
+                            String attrName = (String) attrMap.get(attrKey);
+                            // 最大HPのAttribute
+                            if ("minecraft:generic.max_health".equals(attrName)) {
+                              attribute = Attribute.GENERIC_MAX_HEALTH;
+                            }
+                            // スピードのAttribute
+                            else if ("minecraft:generic.movement_speed".equals(attrName)) {
+                              attribute = Attribute.GENERIC_MOVEMENT_SPEED;
+                            }
+                            // 跳躍力のAttribute
+                            else if ("minecraft:horse.jump_strength".equals(attrName)) {
+                              attribute = Attribute.GENERIC_JUMP_STRENGTH;
+                            }
+                          }
+                        }
+                        if (Objects.nonNull(baseValue) && Objects.nonNull(attribute)) {
+                          if (Attribute.GENERIC_MAX_HEALTH.equals(attribute)) {
+                            maxHealth = baseValue;
+                          } else if (Attribute.GENERIC_MOVEMENT_SPEED.equals(attribute)) {
+                            movementSpeed = baseValue;
+                          } else if (Attribute.GENERIC_JUMP_STRENGTH.equals(attribute)) {
+                            jumpStrength = baseValue;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            // CustomNameの取得
+            boolean isCustomNames = "CustomName".equals(k);
+            this.logger.trace("[TRACE] isCustomNames ? " + isCustomNames);
+            if (isCustomNames) {
+              String[] customNameTags = ((String) v).split(",");
+
+              for (String customNameTag : customNameTags) {
+                logger.trace("[TRACE] customNameTag=" + customNameTag);
+                if (customNameTag.startsWith("{\"extra\"")) {
+                  String customName = customNameTag.substring(19);
+                  customName = customName.substring(0, customName.length() - 3);
+                  logger.trace("[TRACE] customName=" + customName);
+                  v = customName;
+                } else if (customNameTag.startsWith("{\"text\"")) {
+                  if (customNameTag.length() > 8) {
+                    String customName = customNameTag.substring(9);
+                    customName = customName.substring(0, customName.length() - 2);
+                    logger.trace("[TRACE] customName=" + customName);
+                    v = customName;
+                  }
+                }
+              }
+            }
+
+            // Saddleの取得
+            boolean isSaddleItem = "SaddleItem".equals(k);
+            this.logger.trace("[TRACE] isSaddleItem ? " + isSaddleItem);
+            if (isSaddleItem && v instanceof Map<?, ?> m) {
+              boolean isNotEmptySaddleItem = !m.keySet().isEmpty();
+              this.logger.trace("[TRACE] isNotEmptySaddleItem ? " + isNotEmptySaddleItem);
+              if (isNotEmptySaddleItem) {
+                Integer count = null;
+                Material saddleMaterial = null;
+                for (var key : m.keySet()) {
+                  if (key instanceof String saddleKey) {
+                    boolean isIdCount = "Count".equals(saddleKey);
+                    this.logger.trace("[TRACE] isIdCount ? " + isIdCount);
+                    if (isIdCount) {
+                      count = Integer.valueOf(m.get(key).toString());
+                      this.logger.trace("[TRACE] count=" + count);
+                    }
+                    
+                    boolean isIdKey = "id".equals(key);
+                    this.logger.trace("[TRACE] isIdKey ? " + isIdKey);
+                    if (isIdKey) {
+                      String namespaceKey = m.get(key).toString();
+                      saddleMaterial = Material.matchMaterial(namespaceKey);
+                      this.logger.trace("[TRACE] saddleMaterial=" + saddleMaterial);
+                    }
+                    
+                    // Saddle と 数量が入っていたら、設定されているものと見てサドルを設定する
+                    if (Objects.nonNull(saddleMaterial) && Objects.nonNull(count)) {
+                      equippedSaddle = new ItemStack(saddleMaterial, count);
+                      this.logger.trace("[TRACE] equippedSaddle=" + equippedSaddle);
+                    }
+                  }
+                }
+              }
+            }
+
+            boolean isSaddle = "Saddle".equals(k);
+            this.logger.trace("[TRACE] isSaddle ? " + isSaddle);
+            if (isSaddle && v instanceof Byte b) {
+              boolean isNotEmptySaddle = Objects.nonNull(b);
+              this.logger.trace("[TRACE] isNotEmptySaddle ? " + isNotEmptySaddle);
+              Material saddleMaterial = null;
+              if (isNotEmptySaddle) {
+                String namespaceKey = k.toString();
+                saddleMaterial = Material.matchMaterial(namespaceKey);
+                this.logger.trace("[TRACE] saddleMaterial=" + saddleMaterial);
+              }
+
+              // Saddle が 1 なら設定されているものと見てサドルを設定する
+              if (Objects.nonNull(saddleMaterial) && isNotEmptySaddle && (b.intValue() == 1)) {
+                equippedSaddle = new ItemStack(saddleMaterial, 1);
+                this.logger.trace("[TRACE] equippedSaddle=" + equippedSaddle);
+              }
+            }
+            
+            // Armorの取得
             boolean isArmorItems = k.equals("ArmorItems");
             this.logger.trace("[TRACE] boolean isArmorItems <- k.equals(\"ArmorItems\")");
             this.logger.trace("[TRACE] isArmorItems ? " + isArmorItems);
@@ -546,6 +695,52 @@ public class EventListener implements Listener {
     }
     entityTag.load();
     this.logger.trace("[TRACE] entityTag.load()");
+    // 基本パラメータの設定
+    // ウマ系
+    if (entity instanceof AbstractHorse absHorse) {
+      this.logger.trace("[TRACE] entity is AbstractHorse");
+      // 最大体力
+      if (Objects.nonNull(maxHealth)) {
+        absHorse.setMaxHealth(Double.valueOf((double) maxHealth));
+        this.logger.trace("[TRACE] absHorse.setMaxHealth(Double.valueOf(" + maxHealth + "))");
+      }
+      // 移動速度
+      if (Objects.nonNull(movementSpeed)) {
+        absHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue((double) movementSpeed);
+        this.logger.trace("[TRACE] absHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(" + movementSpeed + ")");
+      }
+      // 跳躍力
+      if (Objects.nonNull(jumpStrength)) {
+        absHorse.setJumpStrength((double) jumpStrength);
+        this.logger.trace("[TRACE] absHorse.setJumpStrength((double) " + jumpStrength + ")");
+      }
+    }
+
+    // 旧式サドルの設定
+    // ウマ
+    if (Objects.nonNull(equippedSaddle) && entity instanceof Horse horse) {
+      horse.getInventory().setSaddle(equippedSaddle);
+    }
+    // ロバ
+    if (Objects.nonNull(equippedSaddle) && entity instanceof Donkey donkey) {
+      donkey.getInventory().setSaddle(equippedSaddle);
+    }
+    // ラバ
+    if (Objects.nonNull(equippedSaddle) && entity instanceof Mule mule) {
+      mule.getInventory().setSaddle(equippedSaddle);
+    }
+    // ラクダ
+    if (Objects.nonNull(equippedSaddle) && entity instanceof Camel camel) {
+      camel.getInventory().setSaddle(equippedSaddle);
+    }
+    // ストライダー
+    if (Objects.nonNull(equippedSaddle) && entity instanceof Strider strider) {
+      strider.setSaddle(Objects.nonNull(equippedSaddle));
+    }
+    // ブタ
+    if (Objects.nonNull(equippedSaddle) && entity instanceof Pig pig) {
+      pig.setSaddle(Objects.nonNull(equippedSaddle));
+    }
 
     // 旧式馬鎧の設定
     if (Objects.nonNull(equippedHorseArmor) && entity instanceof Horse horse) {

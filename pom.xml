@@ -4,7 +4,7 @@
 
   <groupId>com.github.albatross256</groupId>
   <artifactId>PetBall</artifactId>
-  <version>5.2.2</version>
+  <version>5.2.4</version>
   <build>
     <plugins>
       <plugin>
@@ -78,7 +78,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
-    <rtag-version>1.5.8</rtag-version>
+    <rtag-version>1.5.9</rtag-version>
   </properties>
   <repositories>
     <repository>
