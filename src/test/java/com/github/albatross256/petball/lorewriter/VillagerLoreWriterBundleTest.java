@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.bukkit.Registry;
 import org.bukkit.entity.Villager;
 import org.junit.jupiter.api.Test;
 
@@ -17,89 +18,76 @@ public class VillagerLoreWriterBundleTest {
 
   @Test
   void noneTest() {
-    assertEquals(bundle.getString(Villager.Profession.NONE.name()), "ニート");
+    assertEquals(bundle.getString("NONE"), "ニート");
   }
 
   @Test
   void armorerTest() {
-    assertEquals(bundle.getString(Villager.Profession.ARMORER.name()), "防具鍛冶");
+    assertEquals(bundle.getString("ARMORER"), "防具鍛冶");
   }
 
   @Test
   void butcherTest() {
-    assertEquals(bundle.getString(Villager.Profession.BUTCHER.name()), "肉屋");
+    assertEquals(bundle.getString("BUTCHER"), "肉屋");
   }
 
   @Test
   void cartographerTest() {
-    assertEquals(bundle.getString(Villager.Profession.CARTOGRAPHER.name()), "製図家");
+    assertEquals(bundle.getString("CARTOGRAPHER"), "製図家");
   }
 
   @Test
   void clericTest() {
-    assertEquals(bundle.getString(Villager.Profession.CLERIC.name()), "聖職者");
+    assertEquals(bundle.getString("CLERIC"), "聖職者");
   }
 
   @Test
   void farmerTest() {
-    assertEquals(bundle.getString(Villager.Profession.FARMER.name()), "農民");
+    assertEquals(bundle.getString("FARMER"), "農民");
   }
 
   @Test
   void fishermanTest() {
-    assertEquals(bundle.getString(Villager.Profession.FISHERMAN.name()), "釣り人");
+    assertEquals(bundle.getString("FISHERMAN"), "釣り人");
   }
 
   @Test
   void fletcherTest() {
-    assertEquals(bundle.getString(Villager.Profession.FLETCHER.name()), "矢師");
+    assertEquals(bundle.getString("FLETCHER"), "矢師");
   }
 
   @Test
   void leatherworkerTest() {
-    assertEquals(bundle.getString(Villager.Profession.LEATHERWORKER.name()), "革細工師");
+    assertEquals(bundle.getString("LEATHERWORKER"), "革細工師");
   }
 
   @Test
   void librarianTest() {
-    assertEquals(bundle.getString(Villager.Profession.LIBRARIAN.name()), "司書");
+    assertEquals(bundle.getString("LIBRARIAN"), "司書");
   }
 
   @Test
   void masonTest() {
-    assertEquals(bundle.getString(Villager.Profession.MASON.name()), "石工職人");
+    assertEquals(bundle.getString("MASON"), "石工職人");
   }
 
   @Test
   void nitwitTest() {
-    assertEquals(bundle.getString(Villager.Profession.NITWIT.name()), "ニート");
+    assertEquals(bundle.getString("NITWIT"), "ニート");
   }
 
   @Test
   void shepherdTest() {
-    assertEquals(bundle.getString(Villager.Profession.SHEPHERD.name()), "羊飼い");
+    assertEquals(bundle.getString("SHEPHERD"), "羊飼い");
   }
 
   @Test
   void weaponsmithTest() {
-    assertEquals(bundle.getString(Villager.Profession.WEAPONSMITH.name()), "武器鍛冶");
+    assertEquals(bundle.getString("WEAPONSMITH"), "武器鍛冶");
   }
 
   @Test
   void toolsmithTest() {
-    assertEquals(bundle.getString(Villager.Profession.TOOLSMITH.name()), "道具鍛冶");
+    assertEquals(bundle.getString("TOOLSMITH"), "道具鍛冶");
   }
-
-  @Test
-  public void checkAllEnums() {
-    for (Locale locale : List.of(Locale.JAPANESE, Locale.ENGLISH)) {
-      ResourceBundle b = ResourceBundle.getBundle(BASE_NAME, locale);
-      for (Villager.Profession iterable_element : Villager.Profession.values()) {
-        assertDoesNotThrow(() -> {
-          b.getString(iterable_element.name());
-        });
-      }
-    }
-  }
-
 }

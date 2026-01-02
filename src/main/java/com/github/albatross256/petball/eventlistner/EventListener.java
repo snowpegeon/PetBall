@@ -520,24 +520,24 @@ public class EventListener implements Listener {
                             String attrName = (String) attrMap.get(attrKey);
                             // 最大HPのAttribute
                             if ("minecraft:generic.max_health".equals(attrName)) {
-                              attribute = Attribute.GENERIC_MAX_HEALTH;
+                              attribute = Attribute.MAX_HEALTH;
                             }
                             // スピードのAttribute
                             else if ("minecraft:generic.movement_speed".equals(attrName)) {
-                              attribute = Attribute.GENERIC_MOVEMENT_SPEED;
+                              attribute = Attribute.MOVEMENT_SPEED;
                             }
                             // 跳躍力のAttribute
                             else if ("minecraft:horse.jump_strength".equals(attrName)) {
-                              attribute = Attribute.GENERIC_JUMP_STRENGTH;
+                              attribute = Attribute.JUMP_STRENGTH;
                             }
                           }
                         }
                         if (Objects.nonNull(baseValue) && Objects.nonNull(attribute)) {
-                          if (Attribute.GENERIC_MAX_HEALTH.equals(attribute)) {
+                          if (Attribute.MAX_HEALTH.equals(attribute)) {
                             maxHealth = baseValue;
-                          } else if (Attribute.GENERIC_MOVEMENT_SPEED.equals(attribute)) {
+                          } else if (Attribute.MOVEMENT_SPEED.equals(attribute)) {
                             movementSpeed = baseValue;
-                          } else if (Attribute.GENERIC_JUMP_STRENGTH.equals(attribute)) {
+                          } else if (Attribute.JUMP_STRENGTH.equals(attribute)) {
                             jumpStrength = baseValue;
                           }
                         }
@@ -706,7 +706,7 @@ public class EventListener implements Listener {
       }
       // 移動速度
       if (Objects.nonNull(movementSpeed)) {
-        absHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue((double) movementSpeed);
+        absHorse.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue((double) movementSpeed);
         this.logger.trace("[TRACE] absHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(" + movementSpeed + ")");
       }
       // 跳躍力

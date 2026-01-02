@@ -51,6 +51,9 @@ public class LoreWriterFactory {
       case CAMEL -> new CamelLoreWriter();
       case SNIFFER -> new SnifferLoreWriter();
       case ARMADILLO -> new ArmadilloLoreWriter();
+      case COPPER_GOLEM -> new CopperGolemLoreWriter();
+      case HAPPY_GHAST -> new HappyGhastLoreWriter();
+      case NAUTILUS -> new NautilusLoreWriter();
       default -> null;
     };
   }
