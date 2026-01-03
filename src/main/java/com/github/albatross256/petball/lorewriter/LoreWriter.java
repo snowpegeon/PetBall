@@ -102,7 +102,7 @@ public abstract class LoreWriter {
     lore.add(this.mobName);
     if (entity instanceof Damageable d && entity instanceof Attributable a) {
       lore.add(getHealthMeter(d.getHealth(), Objects.requireNonNull(
-          a.getAttribute(Attribute.GENERIC_MAX_HEALTH), "MAX HEALTH is null").getValue()));
+          a.getAttribute(Attribute.MAX_HEALTH), "MAX HEALTH is null").getValue()));
     }
     if (entity instanceof Ageable a) {
       String age = a.isAdult() ? adultDisplayStr : childDisplayStr;

@@ -10,6 +10,7 @@ import com.github.albatross256.petball.balldata.CamelBallData;
 import com.github.albatross256.petball.balldata.CatBallData;
 import com.github.albatross256.petball.balldata.ChickenBallData;
 import com.github.albatross256.petball.balldata.CodBallData;
+import com.github.albatross256.petball.balldata.CopperGolemBallData;
 import com.github.albatross256.petball.balldata.CowBallData;
 import com.github.albatross256.petball.balldata.DolphinBallData;
 import com.github.albatross256.petball.balldata.DonkeyBallData;
@@ -17,11 +18,13 @@ import com.github.albatross256.petball.balldata.FoxBallData;
 import com.github.albatross256.petball.balldata.FrogBallData;
 import com.github.albatross256.petball.balldata.GlowSquidBallData;
 import com.github.albatross256.petball.balldata.GoatBallData;
+import com.github.albatross256.petball.balldata.HappyGhastBallData;
 import com.github.albatross256.petball.balldata.HorseBallData;
 import com.github.albatross256.petball.balldata.IronGolemBallData;
 import com.github.albatross256.petball.balldata.LlamaBallData;
 import com.github.albatross256.petball.balldata.MuleBallData;
 import com.github.albatross256.petball.balldata.MushroomBallData;
+import com.github.albatross256.petball.balldata.NautilusBallData;
 import com.github.albatross256.petball.balldata.OcelotBallData;
 import com.github.albatross256.petball.balldata.PandaBallData;
 import com.github.albatross256.petball.balldata.ParrotBallData;
@@ -130,6 +133,9 @@ public class BallManager {
         new CamelBallData(),
         new SnifferBallData(),
         new ArmadilloBallData(),
+        new CopperGolemBallData(),
+        new HappyGhastBallData(),
+        new NautilusBallData(),
     };
 
     for (BallData ballData : ballDataArray) {
