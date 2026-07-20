@@ -66,6 +66,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import net.kyori.adventure.text.event.ClickEvent.Payload.Int;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -173,6 +174,13 @@ public class EventListener implements Listener {
    */
   private static final Set<Material> EXCLUSION_MATERIALS = Collections.unmodifiableSet(
       EnumSet.of(IRON_DOOR, IRON_TRAPDOOR));
+
+  /**
+   * <p>
+   * 復元から除外するキーセット一覧.<br>
+   * </p>
+   */
+  private static final Set<String> EXCLUSION_DATA_KEY = Set.of("UUID", "Pos");
 
   /**
    * <p>
@@ -476,7 +484,20 @@ public class EventListener implements Listener {
 
     if (tag.hasTag(ENTITYBALL_ISC_KEY)) {
       Map<?, ?> tags = tag.get(ENTITYBALL_ISC_KEY);
-      tags.forEach((k, v) -> entityTag.set(v, k));
+      tags.forEach((k, v) -> {
+        // 1.21.11対応で、復元エラーの原因になるキーを取り除く
+        if(EXCLUSION_DATA_KEY.contains(k)) {
+          this.logger.trace("[TRACE] skip " + k);
+//        } else if(k.equals("Pos")){
+//          ArrayList<Double> list = new ArrayList<Double>();
+//          list.add(newLocation.getX());
+//          list.add(newLocation.getY());
+//          list.add(newLocation.getZ());
+//          entityTag.set(list, k);
+        } else {
+          entityTag.set(v, k);
+        }
+      });
     } else {
       // 1.20.4以前のNBTデータから馬鎧を取り出す
       var nbtTag = itemTag.get().get(ENTITYBALL_NBT_KEY);
@@ -632,7 +653,16 @@ public class EventListener implements Listener {
             this.logger.trace("[TRACE] boolean isArmorItems <- k.equals(\"ArmorItems\")");
             this.logger.trace("[TRACE] isArmorItems ? " + isArmorItems);
 
-            if (isArmorItems && v instanceof List<?> l) {
+            // 1.21.11対応で、復元エラーの原因になるキーを取り除く
+            if(EXCLUSION_DATA_KEY.contains(k)) {
+              this.logger.trace("[TRACE] skip " + k);
+//            } else if(k.equals("Pos")) {
+//              ArrayList<Double> list = new ArrayList<Double>();
+//              list.add(newLocation.getX());
+//              list.add(newLocation.getY());
+//              list.add(newLocation.getZ());
+//              entityTag.set(list.toArray(), k);
+            } else if (isArmorItems && v instanceof List<?> l) {
               boolean isNotEmptyArmorItemList = !l.isEmpty();
               this.logger.trace(
                   "[TRACE] boolean isNotEmptyArmorItemList <- !armorItemList.isEmpty()");
@@ -753,7 +783,7 @@ public class EventListener implements Listener {
       horseInv.setArmor(equippedHorseArmor);
     }
     // タグ情報にエンティティの位置情報があるため、ここで今ボールを使った座標に移動させる
-    entity.teleport(newLocation);
+//    entity.teleport(newLocation);
     this.logger.trace("[TRACE]EventListener.EventListener.onTap Parse NBT END");
 
     /* 以下ボールの生成及びインベントリ転送*/

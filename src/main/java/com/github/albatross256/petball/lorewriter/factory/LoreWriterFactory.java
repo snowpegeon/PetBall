@@ -54,6 +54,7 @@ public class LoreWriterFactory {
       case COPPER_GOLEM -> new CopperGolemLoreWriter();
       case HAPPY_GHAST -> new HappyGhastLoreWriter();
       case NAUTILUS -> new NautilusLoreWriter();
+      case ZOMBIE_NAUTILUS -> new ZombieNautilusLoreWriter();
       default -> null;
     };
   }
