@@ -48,6 +48,7 @@ import com.github.albatross256.petball.balldata.VillagerBallData;
 import com.github.albatross256.petball.balldata.WanderingTraderBallData;
 import com.github.albatross256.petball.balldata.WolfBallData;
 import com.github.albatross256.petball.balldata.ZombieHorseBallData;
+import com.github.albatross256.petball.balldata.ZombieNautilusBallData;
 import com.github.teruteru128.logger.Logger;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -136,6 +137,7 @@ public class BallManager {
         new CopperGolemBallData(),
         new HappyGhastBallData(),
         new NautilusBallData(),
+        new ZombieNautilusBallData(),
     };
 
     for (BallData ballData : ballDataArray) {
