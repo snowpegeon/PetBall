@@ -7,6 +7,7 @@ import com.github.albatross256.petball.balldata.BallData;
 import com.github.albatross256.petball.balldata.BatBallData;
 import com.github.albatross256.petball.balldata.BeeBallData;
 import com.github.albatross256.petball.balldata.CamelBallData;
+import com.github.albatross256.petball.balldata.CamelHuskBallData;
 import com.github.albatross256.petball.balldata.CatBallData;
 import com.github.albatross256.petball.balldata.ChickenBallData;
 import com.github.albatross256.petball.balldata.CodBallData;
@@ -40,6 +41,7 @@ import com.github.albatross256.petball.balldata.SnifferBallData;
 import com.github.albatross256.petball.balldata.SnowGolemBallData;
 import com.github.albatross256.petball.balldata.SquidBallData;
 import com.github.albatross256.petball.balldata.StriderBallData;
+import com.github.albatross256.petball.balldata.SulferCubeBallData;
 import com.github.albatross256.petball.balldata.TadpoleBallData;
 import com.github.albatross256.petball.balldata.TraderLlamaBallData;
 import com.github.albatross256.petball.balldata.TropicalFishData;
@@ -138,6 +140,8 @@ public class BallManager {
         new HappyGhastBallData(),
         new NautilusBallData(),
         new ZombieNautilusBallData(),
+        new CamelHuskBallData(),
+        new SulferCubeBallData(),
     };
 
     for (BallData ballData : ballDataArray) {

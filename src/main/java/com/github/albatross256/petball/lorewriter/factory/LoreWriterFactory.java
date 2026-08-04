@@ -55,6 +55,8 @@ public class LoreWriterFactory {
       case HAPPY_GHAST -> new HappyGhastLoreWriter();
       case NAUTILUS -> new NautilusLoreWriter();
       case ZOMBIE_NAUTILUS -> new ZombieNautilusLoreWriter();
+      case CAMEL_HUSK -> new CamelHuskLoreWriter();
+      case SULFUR_CUBE -> new SulfurCubeLoreWriter();
       default -> null;
     };
   }

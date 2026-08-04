@@ -180,7 +180,7 @@ public class EventListener implements Listener {
    * 復元から除外するキーセット一覧.<br>
    * </p>
    */
-  private static final Set<String> EXCLUSION_DATA_KEY = Set.of("UUID", "Pos");
+  private static final Set<String> EXCLUSION_DATA_KEY = Set.of("UUID", "Pos", "fuse");
 
   /**
    * <p>
