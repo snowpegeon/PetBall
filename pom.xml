@@ -4,16 +4,16 @@
 
   <groupId>com.github.albatross256</groupId>
   <artifactId>PetBall</artifactId>
-  <version>5.3.2</version>
+  <version>5.4.0</version>
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
+        <version>3.14.0</version>
         <configuration>
-          <source>21</source>
-          <target>21</target>
+          <source>25</source>
+          <target>25</target>
         </configuration>
       </plugin>
       <plugin>
@@ -76,11 +76,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-    <rtag-version>1.5.14</rtag-version>
-  </properties>
-  <repositories>
+    <maven.compiler.source>25</maven.compiler.source>
+    <maven.compiler.target>25</maven.compiler.target>
+    <rtag-version>1.5.17</rtag-version>
+  </properties>  <repositories>
     <repository>
       <id>papermc</id>
       <url>https://repo.papermc.io/repository/maven-public/</url>
@@ -112,13 +111,13 @@
     <dependency>
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>1.21.11-R0.1-SNAPSHOT</version>
+      <version>[26.2.build,)</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.github.teruteru128</groupId>
       <artifactId>logger</artifactId>
-      <version>1.1.1</version>
+      <version>1.1.2</version>
     </dependency>
     <dependency>
         <groupId>org.junit.jupiter</groupId>
