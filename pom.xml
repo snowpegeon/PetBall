@@ -4,7 +4,7 @@
 
   <groupId>com.github.albatross256</groupId>
   <artifactId>PetBall</artifactId>
-  <version>5.4.0</version>
+  <version>5.5.0</version>
   <build>
     <plugins>
       <plugin>
@@ -78,7 +78,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>25</maven.compiler.source>
     <maven.compiler.target>25</maven.compiler.target>
-    <rtag-version>1.5.17</rtag-version>
+    <rtag-version>1.5.18</rtag-version>
   </properties>  <repositories>
     <repository>
       <id>papermc</id>
@@ -111,7 +111,7 @@
     <dependency>
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>[26.2.build,)</version>
+      <version>[26.3.build,)</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
